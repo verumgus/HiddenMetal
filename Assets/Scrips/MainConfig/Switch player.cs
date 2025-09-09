@@ -2,14 +2,19 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class CharacterControllerDisabler : MonoBehaviour
+public class SwitchPlayer : MonoBehaviour
 {
     [Header("Personagens")]
-    [SerializeField] private PlayerController playerObjectS; 
+    [SerializeField]private CamFollowSwitch camFollowSwitch;
+
+    [SerializeField] private PlayerController playerObjectS;
+    
+     
     [SerializeField] private PlayerController playerObjectH;
+
     //colocar um set true para o seek ou hide ao iniciar o jogo
-    [SerializeField] private bool isSeek;
-    [SerializeField] private bool isHide;
+    [SerializeField] public bool isSeek;
+    [SerializeField] public bool isHide;
 
     [Header("Valores configurações")]
     public float noSpeedMove = 0f;
@@ -20,6 +25,10 @@ public class CharacterControllerDisabler : MonoBehaviour
 
     void Start()
     {
+        
+        
+       
+        
            
     }
 
@@ -51,6 +60,7 @@ public class CharacterControllerDisabler : MonoBehaviour
     // tem como melhorar alem de verificar interação
     public void ChangeHide()
     {
+        
         playerObjectH.SetSpeedMove(noSpeedMove);
         playerObjectH.SetSpeedRot(noSpeedRot);
         //dar valor ao caçador
@@ -58,9 +68,12 @@ public class CharacterControllerDisabler : MonoBehaviour
         playerObjectS.SetSpeedRot(moreSpeedRot);
         isHide = true;
         isSeek = false;
+        
+
     }
     public void ChangeSeek()
     {
+        
         playerObjectS.SetSpeedMove(noSpeedMove);
         playerObjectS.SetSpeedRot(noSpeedRot);
         //Dar valor ao Procurado
@@ -68,6 +81,7 @@ public class CharacterControllerDisabler : MonoBehaviour
         playerObjectH.SetSpeedRot(moreSpeedRot);
         isHide = false;
         isSeek = true;
+        
 
     }
 

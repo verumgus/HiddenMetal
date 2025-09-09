@@ -21,19 +21,24 @@ public class PlayerController : MonoBehaviour
     private InputAction moveAction;
     //private InputAction toggleAction;
 
+    
+   
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
         myCamera = Camera.main.transform;
         //Teste
         SetupInputSystem();
+        
     }
     //memorando
     //quero que o player foque em objetos relevantes quando passar por eles ou aperta um botão
 
     // Update is called once per frame
     void Update()
-    {
+    {    
+
         }
 
     void SetupInputSystem()
@@ -57,6 +62,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+   
     void HandleMovement()
     {
         Vector3 movimento = new Vector3(inputVector.x, 0, inputVector.y);
