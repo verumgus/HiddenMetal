@@ -36,10 +36,7 @@ public class PlayerController : MonoBehaviour
     //quero que o player foque em objetos relevantes quando passar por eles ou aperta um botão
 
     // Update is called once per frame
-    void Update()
-    {    
-
-        }
+    
 
     void SetupInputSystem()
     {
@@ -65,11 +62,11 @@ public class PlayerController : MonoBehaviour
    
     void HandleMovement()
     {
-        Vector3 movimento = new Vector3(inputVector.x, 0, inputVector.y);
+        Vector3 movimento = new (inputVector.x, 0, inputVector.y);
         movimento = myCamera.TransformDirection(movimento);
         movimento.y = 0f;
 
-        controller.Move(movimento * Time.fixedDeltaTime * speedMove);
+        controller.Move(speedMove * Time.fixedDeltaTime * movimento);
         controller.Move(new Vector3(0, gravity, 0) * Time.fixedDeltaTime);
 
         if (movimento != Vector3.zero)
