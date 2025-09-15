@@ -5,10 +5,12 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-    [Header("Status de player")]
+    [Header("Entradas de Classe")]
     private CharacterController controller;
     private Transform myCamera;
 
+
+    [Header("Status do Jogador")]
     public float speedMove;
     public float speedRot;
     public float gravity;
@@ -17,33 +19,26 @@ public class PlayerController : MonoBehaviour
     public float SpeedRot => speedRot;
     public float Gravity => gravity;
 
-    [Header("Mesh Settings")]
-    [SerializeField] private MeshFilter meshFilter; // Referência para o MeshFilter
-    [SerializeField] private Mesh[] alternateMeshes; // Meshes alternativas
-    [SerializeField] private bool useAlternateMesh = false; // Estado atual da mesh
-    [SerializeField] private int currentMeshIndex = 0; // Índice da mesh atual
+    
 
     // Input system
     private Vector2 inputVector;
     private InputAction moveAction;
-    private InputAction toggleMeshAction;
+    
+
+
+    [SerializeField] private int currentMeshIndex = 0; // Índice da mesh atual
+
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         myCamera = Camera.main.transform;
 
-        // Buscar automaticamente o MeshFilter se não estiver configurado
-        if (meshFilter == null)
-            meshFilter = GetComponent<MeshFilter>();
-
         SetupInputSystem();
 
-        // Verificar se há meshes alternativas configuradas
-        if (alternateMeshes != null && alternateMeshes.Length > 0)
-        {
-            Debug.Log("Meshes alternativas disponíveis: " + alternateMeshes.Length);
-        }
+
+
     }
 
     void SetupInputSystem()
@@ -59,11 +54,9 @@ public class PlayerController : MonoBehaviour
         moveAction.canceled += ctx => inputVector = Vector2.zero;
         moveAction.Enable();
 
-        // Configuração da tecla para trocar mesh
-        toggleMeshAction = new InputAction("toggleMesh", InputActionType.Button);
-        toggleMeshAction.AddBinding("<Keyboard>/e");
-        toggleMeshAction.performed += ctx => ToggleObjectMesh();
-        toggleMeshAction.Enable();
+       
+
+
     }
 
     void FixedUpdate()
@@ -91,63 +84,23 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ToggleObjectMesh()
     {
-        if (meshFilter == null)
-        {
-            Debug.LogWarning("MeshFilter não encontrado no objeto!");
-            return;
-        }
 
-        if (alternateMeshes != null && alternateMeshes.Length > 0)
-        {
-            useAlternateMesh = !useAlternateMesh;
-
-            if (useAlternateMesh)
-            {
-                // Usa a próxima mesh alternativa
-                currentMeshIndex = (currentMeshIndex + 1) % alternateMeshes.Length;
-                meshFilter.mesh = alternateMeshes[currentMeshIndex];
-                Debug.Log("Mesh alterada para: " + alternateMeshes[currentMeshIndex].name + " (Índice: " + currentMeshIndex + ")");
-            }
-            else
-            {
-                // Volta para a mesh original
-                meshFilter.mesh = GetOriginalMesh();
-                Debug.Log("Mesh original restaurada");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Nenhuma mesh alternativa configurada!");
-        }
     }
 
     /// <summary>
     /// Retorna para a mesh original
     /// </summary>
-    private Mesh GetOriginalMesh()
-    {
+    
         // Se você quiser salvar a mesh original, pode armazená-la no Start
-        Mesh originalMesh = meshFilter.mesh;
-        currentMeshIndex = 0;
-        return originalMesh;
-    }
+       
+    
 
     /// <summary>
     /// Método público para trocar para uma mesh específica
     /// </summary>
     public void SetMesh(int meshIndex)
     {
-        if (meshFilter != null && alternateMeshes != null && meshIndex >= 0 && meshIndex < alternateMeshes.Length)
-        {
-            meshFilter.mesh = alternateMeshes[meshIndex];
-            currentMeshIndex = meshIndex;
-            useAlternateMesh = true;
-            Debug.Log("Mesh alterada para: " + alternateMeshes[meshIndex].name);
-        }
-        else
-        {
-            Debug.LogWarning("Índice de mesh inválido ou não configurado!");
-        }
+       
     }
 
     /// <summary>
@@ -155,17 +108,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AddAlternateMesh(Mesh newMesh)
     {
-        if (alternateMeshes == null)
-        {
-            alternateMeshes = new Mesh[1] { newMesh };
-        }
-        else
-        {
-            System.Array.Resize(ref alternateMeshes, alternateMeshes.Length + 1);
-            alternateMeshes[alternateMeshes.Length - 1] = newMesh;
-        }
-
-        Debug.Log("Mesh alternativa adicionada. Total: " + alternateMeshes.Length);
+       
     }
 
     /// <summary>
@@ -173,12 +116,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void RestoreOriginalMesh()
     {
-        if (meshFilter != null)
-        {
-            meshFilter.mesh = GetOriginalMesh();
-            useAlternateMesh = false;
-            Debug.Log("Mesh original restaurada");
-        }
     }
 
     // Métodos de velocidade
@@ -192,8 +129,7 @@ public class PlayerController : MonoBehaviour
         if (moveAction != null)
             moveAction.Disable();
 
-        if (toggleMeshAction != null)
-            toggleMeshAction.Disable();
+        
     }
 
     void OnDisable()
@@ -202,8 +138,7 @@ public class PlayerController : MonoBehaviour
         if (moveAction != null)
             moveAction.Disable();
 
-        if (toggleMeshAction != null)
-            toggleMeshAction.Disable();
+        
     }
 
     void OnEnable()
@@ -212,8 +147,7 @@ public class PlayerController : MonoBehaviour
         if (moveAction != null)
             moveAction.Enable();
 
-        if (toggleMeshAction != null)
-            toggleMeshAction.Enable();
+        
     }
 
     /// <summary>
@@ -224,5 +158,5 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Retorna o nome da mesh atual
     /// </summary>
-    public string GetCurrentMeshName() => meshFilter != null ? meshFilter.mesh.name : "Nenhuma";
+    //public string GetCurrentMeshName() => meshFilter != null ? meshFilter.mesh.name : "Nenhuma";
 }

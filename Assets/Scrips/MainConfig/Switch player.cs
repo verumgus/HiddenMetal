@@ -68,8 +68,8 @@ public class SwitchPlayer : MonoBehaviour
     /// <summary>
     /// Gerencia o input de troca de personagem
     /// </summary>
-    private void HandleInput()
-    {
+    public void HandleInput()
+    {   // aqui define se esta como seek ou hide
         if (Input.GetKeyDown(switchKey))
         {
             SwitchCharacter();
@@ -81,6 +81,7 @@ public class SwitchPlayer : MonoBehaviour
     /// </summary>
     private void SwitchCharacter()
     {
+        
         if (isSeek)
         {
             SetHiderState();
@@ -122,6 +123,7 @@ public class SwitchPlayer : MonoBehaviour
 
         // Configura velocidades
         SetPlayerSpeed(playerObjectS, noSpeedMove, noSpeedRot);  // Seeker fica parado
+
         SetPlayerSpeed(playerObjectH, moreSpeedMove, moreSpeedRot); // Hider se move
 
         // Atualiza estados
