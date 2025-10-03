@@ -1739,6 +1739,8 @@ MonoBehaviour:
   timerBar: {fileID: 1070561632}
   maxTime: 10
   timeleft: 0
+  pauseTime: 0
+  maxPauseTime: 30
   timeUpText: {fileID: 1339409123}
   playerSwitch: {fileID: 2056702163}
 --- !u!1001 &3340450732982325919

@@ -19,7 +19,7 @@ public class SwitchPlayer : MonoBehaviour
     public float moreSpeedRot = 10f;
 
     [Header("Input Settings")]
-    [SerializeField] private KeyCode switchKey = KeyCode.X;
+    [SerializeField] private KeyCode switchKey = KeyCode.X;// modulo de troca de comando
 
     void Start()
     {

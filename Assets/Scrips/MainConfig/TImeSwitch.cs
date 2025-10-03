@@ -7,7 +7,13 @@ public class TImeSwitch : MonoBehaviour
     [SerializeField] private Image timerBar;
     [SerializeField] private float maxTime;
     [SerializeField] private float timeleft;
+    [Header("Pause TIme Switch")]
+    [SerializeField] private float pauseTime;
+    [SerializeField] private float maxPauseTime;
+
     public GameObject timeUpText;
+
+
 
      public SwitchPlayer playerSwitch;
 
@@ -18,25 +24,49 @@ public class TImeSwitch : MonoBehaviour
         timeUpText.SetActive(false);
         playerSwitch = GetComponent<SwitchPlayer>();
         timeleft = maxTime;
+        pauseTime = maxPauseTime;
         
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(timeleft > 0)
+        GameCountTurn();
+        
+    }
+
+    public void TimesCont(float time, float maxTime)
+    {           
+        timeleft -= Time.deltaTime;
+        
+        timerBar.fillAmount = time / maxTime;
+    }
+    public void GameCountTurn()
+    {
+        if (timeleft > 0)
         {
-            timeleft -= Time.deltaTime;
-            timerBar.fillAmount = timeleft/maxTime;
+            TimesCont(timeleft, maxTime);
         }
         else
         {
             timeUpText.SetActive(true);
             //Time.timeScale = 0;
             timeleft = 0;
-            
+            //PauseSwitch();
+            Debug.Log("Troca feita");
+            Invoke("PauseSwitch",5f);// metodo de pause provisorio
+
         }
-        if(timeleft == 0) { Debug.Log("Troca feita");playerSwitch.HandleInput();timeleft = maxTime;/*reset time*/ }
+        if (timeleft == 0) {  }
+
+    }
+
+    public void PauseSwitch()
+    {   
+        playerSwitch.HandleInput();
+        timeleft = maxTime;
+        timeUpText.SetActive(false);
         
+
     }
 }
