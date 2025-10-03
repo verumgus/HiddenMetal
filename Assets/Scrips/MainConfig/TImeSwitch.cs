@@ -9,7 +9,7 @@ public class TImeSwitch : MonoBehaviour
     [SerializeField] private float timeleft;
     public GameObject timeUpText;
 
-     SwitchPlayer playerSwitch;
+     public SwitchPlayer playerSwitch;
 
 
 
@@ -32,11 +32,11 @@ public class TImeSwitch : MonoBehaviour
         else
         {
             timeUpText.SetActive(true);
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
             timeleft = 0;
             
         }
-        if(timeleft == 0) { playerSwitch.HandleInput(); }
+        if(timeleft == 0) { Debug.Log("Troca feita");playerSwitch.HandleInput();timeleft = maxTime;/*reset time*/ }
         
     }
 }

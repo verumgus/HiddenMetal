@@ -29,7 +29,7 @@ public class SwitchPlayer : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
+       // HandleInput();
     }
 
     /// <summary>
@@ -74,6 +74,7 @@ public class SwitchPlayer : MonoBehaviour
         {
             SwitchCharacter();
         }
+        SwitchCharacter();
     }
 
     /// <summary>

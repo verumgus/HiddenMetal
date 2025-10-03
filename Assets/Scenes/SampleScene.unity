@@ -1740,6 +1740,7 @@ MonoBehaviour:
   maxTime: 10
   timeleft: 0
   timeUpText: {fileID: 1339409123}
+  playerSwitch: {fileID: 2056702163}
 --- !u!1001 &3340450732982325919
 PrefabInstance:
   m_ObjectHideFlags: 0
