@@ -30,6 +30,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int currentMeshIndex = 0; // Índice da mesh atual
 
 
+
+    void Awake()
+    {
+       StateManager.Instance.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    void OnDestroy()
+    {
+        // Limpeza dos inputs
+        if (moveAction != null)
+            moveAction.Disable();
+        StateManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+    }
+
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -123,14 +138,6 @@ public class PlayerController : MonoBehaviour
     public void SetSpeedRot(float newSpeedRot) { speedRot = newSpeedRot; }
     public void SetGravity(float newGravity) { gravity = newGravity; }
 
-    void OnDestroy()
-    {
-        // Limpeza dos inputs
-        if (moveAction != null)
-            moveAction.Disable();
-
-        
-    }
 
     void OnDisable()
     {
@@ -159,4 +166,10 @@ public class PlayerController : MonoBehaviour
     /// Retorna o nome da mesh atual
     /// </summary>
     //public string GetCurrentMeshName() => meshFilter != null ? meshFilter.mesh.name : "Nenhuma";
+
+    private void OnGameStateChanged(GameState newGameState)
+    {
+        enabled = newGameState == GameState.GamePlay;
+    }
+
 }

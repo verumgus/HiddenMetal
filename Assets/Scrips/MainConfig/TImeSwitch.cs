@@ -71,7 +71,7 @@ public class TImeSwitch : MonoBehaviour
         timeUpText.SetActive(true);
         timeleft = 0;
         isPaused = true;
-       
+        PauseSystem();
         Debug.Log("Iniciando pausa - Troca em breve");
     }
 
@@ -83,6 +83,17 @@ public class TImeSwitch : MonoBehaviour
         timeUpText.SetActive(false); // Esconde o texto
         isPaused = false; // Volta ao estado normal
         Debug.Log("Pausa finalizada - Jogo retomado");
+        PauseSystem();
+    }
+
+    public void PauseSystem()
+    {
+        GameState currentGameState = StateManager.Instance.CurrentGameState;
+        GameState newGameState = currentGameState == GameState.GamePlay
+            ?GameState.Paused
+            :GameState.GamePlay;
+
+        StateManager.Instance.SetState(newGameState);
     }
     
 }

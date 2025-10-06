@@ -1552,7 +1552,7 @@ MonoBehaviour:
   maxTime: 10
   timeleft: 0
   pauseTime: 0
-  maxPauseTime: 30
+  maxPauseTime: 10
   timeUpText: {fileID: 1339409123}
   playerSwitch: {fileID: 2056702163}
 --- !u!1001 &5087392604862573542
