@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +13,9 @@ public class TImeSwitch : MonoBehaviour
     [SerializeField] private float maxPauseTime;
 
     public GameObject timeUpText;
+    public SwitchPlayer playerSwitch;
 
-
-
-     public SwitchPlayer playerSwitch;
-
-
+    private bool isPaused = false;
 
     void Start()
     {
@@ -25,48 +23,66 @@ public class TImeSwitch : MonoBehaviour
         playerSwitch = GetComponent<SwitchPlayer>();
         timeleft = maxTime;
         pauseTime = maxPauseTime;
-        
+        isPaused = false;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         GameCountTurn();
-        
     }
 
     public void TimesCont(float time, float maxTime)
-    {           
+    {
         timeleft -= Time.deltaTime;
-        
         timerBar.fillAmount = time / maxTime;
     }
+
+    public void PauseCount()
+    {
+        pauseTime -= Time.deltaTime;
+
+        if (pauseTime <= 0)
+        {
+            pauseTime = 0;
+            ResumeGame();
+        }
+    }
+
     public void GameCountTurn()
     {
+        if (isPaused)
+        {
+            PauseCount(); // Conta o tempo de pausa
+            return;
+        }
+
         if (timeleft > 0)
         {
-            TimesCont(timeleft, maxTime);
+            TimesCont(timeleft, maxTime); // Tempo normal do jogo
         }
         else
         {
-            timeUpText.SetActive(true);
-            //Time.timeScale = 0;
-            timeleft = 0;
-            //PauseSwitch();
-            Debug.Log("Troca feita");
-            Invoke("PauseSwitch",5f);// metodo de pause provisorio
-
+            StartPause(); // Inicia o estado de pausa
         }
-        if (timeleft == 0) {  }
-
     }
 
-    public void PauseSwitch()
-    {   
-        playerSwitch.HandleInput();
-        timeleft = maxTime;
-        timeUpText.SetActive(false);
-        
-
+    public void StartPause()
+    {
+        timeUpText.SetActive(true);
+        timeleft = 0;
+        isPaused = true;
+       
+        Debug.Log("Iniciando pausa - Troca em breve");
     }
+
+    public void ResumeGame()
+    {
+        playerSwitch.HandleInput(); // Executa a troca de personagem
+        timeleft = maxTime; // Reseta o timer principal
+        pauseTime = maxPauseTime; // Reseta o timer de pausa
+        timeUpText.SetActive(false); // Esconde o texto
+        isPaused = false; // Volta ao estado normal
+        Debug.Log("Pausa finalizada - Jogo retomado");
+    }
+    
 }
