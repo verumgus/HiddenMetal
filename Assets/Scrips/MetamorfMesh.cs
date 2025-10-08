@@ -91,4 +91,27 @@ public class MetamorfMesh : MonoBehaviour
         toggleAction.performed += ctx => TrocarForma();
         toggleAction.Enable();
     }
+
+    public void HitMe()
+    {
+        //aqui define se ele foi acertado ou não
+
+
+        {
+            isHide = switchPlayer.isHide;
+            myMesh.mesh = meshList[0];
+
+            // Aplica o material se disponível
+            if (myMeshRenderer != null && materialList != null && currentModel < materialList.Length && materialList[0] != null)
+            {
+                myMeshRenderer.material = materialList[0];
+            }
+
+            currentModel++;
+            if (currentModel >= meshList.Length) { currentModel = 0; }
+        }
+  
+    }
+
+    
 }

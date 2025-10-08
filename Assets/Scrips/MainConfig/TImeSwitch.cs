@@ -83,7 +83,7 @@ public class TImeSwitch : MonoBehaviour
         timeUpText.SetActive(false); // Esconde o texto
         isPaused = false; // Volta ao estado normal
         Debug.Log("Pausa finalizada - Jogo retomado");
-        PauseSystem();
+        PauseSystem(); 
     }
 
     public void PauseSystem()
