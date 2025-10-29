@@ -1686,11 +1686,6 @@ MonoBehaviour:
   startAsSeeker: 1
   isSeek: 0
   isHide: 1
-  noSpeedMove: 0
-  noSpeedRot: 0
-  moreSpeedMove: 5
-  moreSpeedRot: 10
-  switchKey: 120
 --- !u!4 &2056702164
 Transform:
   m_ObjectHideFlags: 0

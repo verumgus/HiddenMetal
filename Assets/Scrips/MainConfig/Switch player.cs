@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class SwitchPlayer : MonoBehaviour
 {
@@ -12,29 +13,12 @@ public class SwitchPlayer : MonoBehaviour
      public bool isSeek;
      public bool isHide;
 
-    [Header("Speed Settings")]
-    public float noSpeedMove = 0f;
-    public float noSpeedRot = 0f;
-    public float moreSpeedMove = 5f;
-    public float moreSpeedRot = 10f;
-
-    [Header("Input Settings")]
-    [SerializeField] private KeyCode switchKey = KeyCode.X;// modulo de troca de comando
-
     void Start()
     {
         InitializePlayers();
         SetupInitialState();
     }
 
-    void Update()
-    {
-       // HandleInput();
-    }
-
-    /// <summary>
-    /// Verifica e valida todas as referências necessárias
-    /// </summary>
     private void InitializePlayers()
     {
         // Buscar automaticamente se não estiver configurado
@@ -47,39 +31,32 @@ public class SwitchPlayer : MonoBehaviour
         if (playerObjectH == null)
             Debug.LogWarning("PlayerObjectH (Hide) não está configurado!");
 
-        ValidateReferences();
+        
     }
 
-    /// <summary>
-    /// Configura o estado inicial baseado na escolha do inspetor
-    /// </summary>
+    
     private void SetupInitialState()
     {
+        playerObjectS.enabled = true;
+        playerObjectH.enabled = false;
         if (startAsSeeker)
         {
             SetSeekerState();
+            
         }
         else
         {
             SetHiderState();
+            
         }
     }
 
-    /// <summary>
-    /// Gerencia o input de troca de personagem
-    /// </summary>
     public void HandleInput()
-    {   // aqui define se esta como seek ou hide
-        if (Input.GetKeyDown(switchKey))
-        {
-            SwitchCharacter();
-        }
+    {   
         SwitchCharacter();
     }
 
-    /// <summary>
-    /// Troca entre os personagens baseado no estado atual
-    /// </summary>
+ 
     private void SwitchCharacter()
     {
         
@@ -87,25 +64,22 @@ public class SwitchPlayer : MonoBehaviour
         {
             SetHiderState();
             Debug.Log("Agora você está se escondendo");
+            playerObjectS.enabled = false;
+            playerObjectH.enabled = true;
         }
         else if (isHide)
         {
             SetSeekerState();
             Debug.Log("Agora você está procurando");
+            playerObjectS.enabled = true;
+            playerObjectH.enabled = false;
         }
     }
 
-    /// <summary>
-    /// Configura o estado de procurador (Seeker)
-    /// </summary>
+
     public void SetSeekerState()
     {
-        if (!ValidateReferences()) return;
-
-        // Configura velocidades
-        SetPlayerSpeed(playerObjectH, noSpeedMove, noSpeedRot);  // Hider fica parado
-        SetPlayerSpeed(playerObjectS, moreSpeedMove, moreSpeedRot); // Seeker se move
-
+        
         // Atualiza estados
         isSeek = true;
         isHide = false;
@@ -115,17 +89,10 @@ public class SwitchPlayer : MonoBehaviour
         cameraController.SetHiding(false);
     }
 
-    /// <summary>
-    /// Configura o estado de escondedor (Hider)
-    /// </summary>
+ 
     public void SetHiderState()
     {
-        if (!ValidateReferences()) return;
-
-        // Configura velocidades
-        SetPlayerSpeed(playerObjectS, noSpeedMove, noSpeedRot);  // Seeker fica parado
-
-        SetPlayerSpeed(playerObjectH, moreSpeedMove, moreSpeedRot); // Hider se move
+        
 
         // Atualiza estados
         isSeek = false;
@@ -134,54 +101,20 @@ public class SwitchPlayer : MonoBehaviour
         // Configura câmera
         cameraController.SetSeeking(false);
         cameraController.SetHiding(true);
+        
     }
 
-    /// <summary>
-    /// Define a velocidade de um jogador
-    /// </summary>
-    private void SetPlayerSpeed(PlayerController player, float moveSpeed, float rotationSpeed)
+    public void Timewait()
     {
-        if (player != null)
-        {
-            player.SetSpeedMove(moveSpeed);
-            player.SetSpeedRot(rotationSpeed);
-        }
-    }
-
-    /// <summary>
-    /// Valida se todas as referências necessárias estão configuradas
-    /// </summary>
-    private bool ValidateReferences()
-    {
-        bool allValid = true;
-
-        if (playerObjectS == null)
-        {
-            Debug.LogError("PlayerObjectS (Seek) não está configurado!");
-            allValid = false;
-        }
-
-        if (playerObjectH == null)
-        {
-            Debug.LogError("PlayerObjectH (Hide) não está configurado!");
-            allValid = false;
-        }
-
-        if (cameraController == null)
-        {
-            Debug.LogError("CameraController não está configurado!");
-            allValid = false;
-        }
-
-        return allValid;
+        playerObjectS.enabled = false;
+        playerObjectH.enabled = false;
     }
 
     // Métodos públicos para acesso externo
-    public PlayerController GetCurrentActivePlayer()
+   /* public PlayerController GetCurrentActivePlayer()
     {
         return isSeek ? playerObjectS : playerObjectH;
-    }
+    }*/
 
-    public bool IsSeeking() => isSeek;
-    public bool IsHiding() => isHide;
+   
 }

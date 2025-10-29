@@ -40,6 +40,7 @@ public class TImeSwitch : MonoBehaviour
     public void PauseCount()
     {
         pauseTime -= Time.deltaTime;
+        playerSwitch.Timewait();
 
         if (pauseTime <= 0)
         {
@@ -53,6 +54,7 @@ public class TImeSwitch : MonoBehaviour
         if (isPaused)
         {
             PauseCount(); // Conta o tempo de pausa
+            
             return;
         }
 
