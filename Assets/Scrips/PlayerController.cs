@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public float speedMove;
     public float speedRot;
     public float gravity;
+    private Vector2 direction;
+    private bool canJump;
 
     public float SpeedMove => speedMove;
     public float SpeedRot => speedRot;
@@ -34,46 +36,31 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
        StateManager.Instance.OnGameStateChanged += OnGameStateChanged;
+       controller = GetComponent<CharacterController>();
     }
 
-    void OnDestroy()
+
+
+    public void Mover(InputAction.CallbackContext context)
     {
-        // Limpeza dos inputs
-        if (moveAction != null)
-            moveAction.Disable();
-        StateManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+        direction = context.ReadValue<Vector2>();
     }
 
+    public void Pular(InputAction.CallbackContext context) 
+    {
+        if(context.performed && canJump)
+        {
+            //pula
+            canJump = false;
+        }
+    }
 
     void Start()
-    {
-        controller = GetComponent<CharacterController>();
+    {   
         myCamera = Camera.main.transform;
-
-        SetupInputSystem();
-
-
-
     }
 
-    void SetupInputSystem()
-    {
-        // Configuração do movimento
-        moveAction = new InputAction("move", InputActionType.Value);
-        moveAction.AddCompositeBinding("2DVector")
-            .With("Up", "<Keyboard>/w")
-            .With("Down", "<Keyboard>/s")
-            .With("Left", "<Keyboard>/a")
-            .With("Right", "<Keyboard>/d");
-        moveAction.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
-        moveAction.canceled += ctx => inputVector = Vector2.zero;
-        moveAction.Enable();
-
-       
-
-
-    }
-
+  
     void FixedUpdate()
     {
         HandleMovement();
@@ -81,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-        Vector3 movimento = new Vector3(inputVector.x, 0, inputVector.y);
+        Vector3 movimento = new Vector3(direction.x, 0, direction.y);
         movimento = myCamera.TransformDirection(movimento);
         movimento.y = 0f;
 
@@ -94,46 +81,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Alterna a mesh do objeto quando a tecla E é pressionada
-    /// </summary>
     private void ToggleObjectMesh()
     {
 
     }
 
-    /// <summary>
-    /// Retorna para a mesh original
-    /// </summary>
-    
-        // Se você quiser salvar a mesh original, pode armazená-la no Start
-       
-    
-
-    /// <summary>
-    /// Método público para trocar para uma mesh específica
-    /// </summary>
     public void SetMesh(int meshIndex)
     {
        
     }
 
-    /// <summary>
-    /// Método público para adicionar meshes alternativas via código
-    /// </summary>
     public void AddAlternateMesh(Mesh newMesh)
     {
        
     }
 
-    /// <summary>
-    /// Método para restaurar a mesh original
-    /// </summary>
     public void RestoreOriginalMesh()
     {
     }
 
-    // Métodos de velocidade
     public void SetSpeedMove(float newSpeed) { speedMove = newSpeed; }
     public void SetSpeedRot(float newSpeedRot) { speedRot = newSpeedRot; }
     public void SetGravity(float newGravity) { gravity = newGravity; }
@@ -157,19 +123,21 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    /// <summary>
-    /// Retorna o índice da mesh atual
-    /// </summary>
+
     public int GetCurrentMeshIndex() => currentMeshIndex;
 
-    /// <summary>
-    /// Retorna o nome da mesh atual
-    /// </summary>
-    //public string GetCurrentMeshName() => meshFilter != null ? meshFilter.mesh.name : "Nenhuma";
+    
 
     private void OnGameStateChanged(GameState newGameState)
     {
         enabled = newGameState == GameState.GamePlay;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            canJump = true;
+        }
+    }
 }
