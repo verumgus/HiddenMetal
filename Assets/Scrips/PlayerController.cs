@@ -1,14 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-/// <summary>
-/// Quase isso devo da uma lida no codigo e corrigir ele 
-/// </summary>
-public class PlayerController : MonoBehaviour
+using Unity.Netcode; // ADICIONE ESTA LINHA
+
+public class PlayerController : NetworkBehaviour // MUDE MonoBehaviour para NetworkBehaviour
 {
     [Header("Entradas de Classe")]
     private CharacterController controller;
     private Transform myCamera;
-
 
     [Header("Status do Jogador")]
     public float speedMove;
@@ -17,23 +15,25 @@ public class PlayerController : MonoBehaviour
     private Vector2 direction;
     private bool canJump;
 
-
     void Awake()
     {
-
-       controller = GetComponent<CharacterController>();
+        controller = GetComponent<CharacterController>();
     }
-
-
 
     public void Mover(InputAction.CallbackContext context)
     {
+        // ADICIONE ESTA VERIFICA플O
+        if (!IsOwner) return;
+
         direction = context.ReadValue<Vector2>();
     }
 
-    public void Pular(InputAction.CallbackContext context) 
+    public void Pular(InputAction.CallbackContext context)
     {
-        if(context.performed && canJump)
+        // ADICIONE ESTA VERIFICA플O
+        if (!IsOwner) return;
+
+        if (context.performed && canJump)
         {
             //pula
             canJump = false;
@@ -41,13 +41,18 @@ public class PlayerController : MonoBehaviour
     }
 
     void Start()
-    {   
+    {
+        // ADICIONE ESTA VERIFICA플O
+        if (!IsOwner) return;
+
         myCamera = Camera.main.transform;
     }
 
-  
     void FixedUpdate()
     {
+        // ADICIONE ESTA VERIFICA플O
+        if (!IsOwner) return;
+
         HandleMovement();
     }
 
@@ -66,9 +71,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
+        // ADICIONE ESTA VERIFICA플O (opcional, mas recomendado)
+        if (!IsOwner) return;
+
         if (collision.gameObject.CompareTag("Ground"))
         {
             canJump = true;
